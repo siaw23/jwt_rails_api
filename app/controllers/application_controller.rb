@@ -8,9 +8,10 @@ class ApplicationController < ActionController::API
 
   def authenticate
     authorization_header = request.headers['Authorization']
-    decoded_header = JsonWebToken.decode(authorization_header)
+    token = authorization_header.split(" ").last if authorization_header
+    decoded_token = JsonWebToken.decode(token)
 
-    User.find(decoded_header[:user_id])
+    User.find(decoded_token[:user_id])
   end
 
   def invalid_token
